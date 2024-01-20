@@ -14,6 +14,7 @@ Prior to any analysis, I conduct data preparation steps including loading librar
 #Loading libraries needed
 ```{r}
 library(tidyverse)
+library(car)
 ```
 
 #Loadind Short Delay Memory Data 
@@ -62,9 +63,15 @@ st21_1 <- read_csv("subj21-block-1-Test.csv")
 st21_2 <- read_csv("subj21-block-2-Test.csv")
 st22_1 <- read_csv("subj22-block-1-Test.csv")
 st22_2 <- read_csv("subj22-block-2-Test.csv")
+st23_1 <- read_csv("subj23-block-1-Test.csv")
+st23_2 <- read_csv("subj23-block-2-Test.csv")
+st24_1 <- read_csv("subj24-block-1-Test.csv")
+st24_2 <- read_csv("subj24-block-2-Test.csv")
 ```
 #Loading Long Delay Memory Data
 ```{r}
+#Long data have the same name so are stored in a subdirectory (/long). Make sure to change directory before running this chunk. 
+
 lt1_1 <- read_csv("subj1-block-1-Test.csv")
 lt1_2 <- read_csv("subj1-block-2-Test.csv")
 lt2_1 <- read_csv("subj2-block-1-Test.csv")
@@ -81,7 +88,7 @@ lt7_1 <- read_csv("subj7-block-1-Test.csv")
 lt7_2 <- read_csv("subj7-block-2-Test.csv")
 lt8_1 <- read_csv("subj8-block-1-Test.csv")
 lt8_2 <- read_csv("subj8-block-2-Test.csv")
-lt9_1 <- read_csv("subj8-block-1-Test.csv")
+lt9_1 <- read_csv("subj9-block-1-Test.csv")
 lt9_2 <- read_csv("subj9-block-2-Test.csv")
 lt10_1 <- read_csv("subj10-block-1-Test.csv")
 lt10_2 <- read_csv("subj10-block-2-Test.csv")
@@ -101,6 +108,18 @@ lt17_1 <- read_csv("subj17-block-1-Test.csv")
 lt17_2 <- read_csv("subj17-block-2-Test.csv")
 lt18_1 <- read_csv("subj18-block-1-Test.csv")
 lt18_2 <- read_csv("subj18-block-2-Test.csv")
+lt19_1 <- read_csv("subj19-block-1-Test.csv")
+lt19_2 <- read_csv("subj19-block-2-Test.csv")
+lt20_1 <- read_csv("subj20-block-1-Test.csv")
+lt20_2 <- read_csv("subj20-block-2-Test.csv")
+lt21_1 <- read_csv("subj21-block-1-Test.csv")
+lt21_2 <- read_csv("subj21-block-2-Test.csv")
+lt22_1 <- read_csv("subj22-block-1-Test.csv")
+lt22_2 <- read_csv("subj22-block-2-Test.csv")
+lt23_1 <- read_csv("subj23-block-1-Test.csv")
+lt23_2 <- read_csv("subj23-block-2-Test.csv")
+lt24_1 <- read_csv("subj24-block-1-Test.csv")
+lt24_2 <- read_csv("subj24-block-2-Test.csv")
 ```
 #Loading sleep results for short and long
 ```{r}
@@ -109,13 +128,13 @@ sleep_long <- read_csv("Sleep_long.csv")
 ```
 #Merging all short delay memory data into one dataset
 ```{r}
-st <- rbind(st1_1, st1_2, st2_1, st2_2, st3_1, st3_2, st4_1, st4_2, st5_1, st5_2, st6_1, st6_2, st7_1, st7_2, st8_1, st8_2, st9_1, st9_2, st10_1, st10_2, st11_1, st11_2, st12_1, st12_2, st13_1, st13_2, st14_1, st14_2, st15_1, st15_2, st16_1, st16_2, st17_1, st17_2, st18_1, st18_2, st19_1, st19_2, st20_1, st20_2, st21_1, st21_2, st22_1, st22_2)
+st <- rbind(st1_1, st1_2, st2_1, st2_2, st3_1, st3_2, st4_1, st4_2, st5_1, st5_2, st6_1, st6_2, st7_1, st7_2, st8_1, st8_2, st9_1, st9_2, st10_1, st10_2, st11_1, st11_2, st12_1, st12_2, st13_1, st13_2, st14_1, st14_2, st15_1, st15_2, st16_1, st16_2, st17_1, st17_2, st18_1, st18_2, st19_1, st19_2, st20_1, st20_2, st21_1, st21_2, st22_1, st22_2, st23_1, st23_2, st24_1, st24_2)
 
 st$delay <- "short"
 ```
 #Merging all long delay memory data into one dataset
 ```{r}
-lt <- rbind(lt1_1, lt1_2, lt2_1, lt2_2, lt3_1, lt3_2, lt4_1, lt4_2, lt5_1, lt5_2, lt6_1, lt6_2, lt7_1, lt7_2, lt9_1, lt9_2, lt10_1, lt10_2, lt11_1, lt11_2, lt12_1, lt12_2, lt13_1, lt13_2, lt14_1, lt14_2, lt15_1, lt15_2, lt16_1, lt16_2, lt17_1, lt17_2, lt18_1, lt18_2)
+lt <- rbind(lt1_1, lt1_2, lt2_1, lt2_2, lt3_1, lt3_2, lt4_1, lt4_2, lt5_1, lt5_2, lt6_1, lt6_2, lt7_1, lt7_2, lt8_1, lt8_2, lt9_1, lt9_2, lt10_1, lt10_2, lt11_1, lt11_2, lt12_1, lt12_2, lt13_1, lt13_2, lt14_1, lt14_2, lt15_1, lt15_2, lt16_1, lt16_2, lt17_1, lt17_2, lt18_1, lt18_2, lt19_1, lt19_2, lt20_1, lt20_2, lt21_1, lt21_2, lt22_1, lt22_2, lt23_1, lt23_2, lt24_1, lt24_2)
 
 lt$delay <- "long"
 ```
@@ -128,7 +147,7 @@ st <- st %>% rename(phase_word = `testrespMat_ 6`, phase = `testrespMat_ 8`, res
 lt <- lt %>% rename(phase_word = `testrespMat_ 6`, phase = `testrespMat_ 8`, response = testrespMat_14, correct = testrespMat_15, participant = `testrespMat_ 1`)
 ```
 
-------------------------------------------------
+----------------------------------------------------------------------------
 
 ##Data wrangling
 Here, I start rearranging the data to match my testing aims, hence computing the number of correct trials (recall accuracy) based on our initial data.
@@ -167,7 +186,7 @@ colnames(sleep)[colnames(sleep) == "Delay"] <- "delay"
 general_sleep <- merge(general, sleep, by = c("participant", "delay"))
 ```
 
-----------------------------------------
+------------------------------------------------------------------------------
 
 Now that the data are ready, we can proceed with the Results structure.
 
@@ -175,18 +194,18 @@ Now that the data are ready, we can proceed with the Results structure.
 
 #Data preparation and Assumptions Check
 ```{r}
+hist(correct_counts_st$correctpercentage) #Included in Appendix
+hist(correct_counts_lt$correctpercentage) #Included in Appendix
+shapiro.test(correct_counts_st$correctpercentage)
+shapiro.test(correct_counts_lt$correctpercentage)
+bartlett.test(general$correctpercentage, general$phase_word)
+
+
 st_0 <- correct_counts_st %>% filter(phase_word == 'zero')
 st_180 <- correct_counts_st %>% filter(phase_word == 'oneeighty')
-hist(correct_counts_st$correctpercentage) #Included in Appendix
-shapiro.test(correct_counts_st$correctpercentage)
 
-```
-
-```{r}
 lt_0 <- correct_counts_lt %>% filter(phase_word == 'zero')
 lt_180 <- correct_counts_lt %>% filter(phase_word == 'oneeighty')
-hist(correct_counts_lt$correctpercentage) #Included in Appendix
-shapiro.test(correct_counts_lt$correctpercentage)
 ```
 
 ##Section 3.2 and 3.3 - The TIME effect replication in short delay recall + The TIME effect longevity across 24 hours
@@ -195,18 +214,15 @@ shapiro.test(correct_counts_lt$correctpercentage)
 
 #Descriptives - by phase and delay (Table 2)
 ```{r}
-correct_phase_st <- correct_counts_st %>% group_by(phase_word) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(44), min = min(correctpercentage), max = max(correctpercentage))
-```
+#Merging altogether
+descriptives_correct <- rbind(descriptives_short, descriptives_long)
 
-```{r}
-correct_phase_lt <- correct_counts_lt %>% group_by(phase_word) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/36, min = min(correctpercentage), max = max(correctpercentage))
-```
-```{r}
-correct_phase <- rbind(correct_phase_st, correct_phase_lt)
-```
+descriptives_correct <- general %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(48), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
+    ci_upper = t.test(correctpercentage)$conf.int[2])
 
-```{r}
-general_phase <- general %>% group_by(delay, phase) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage))
+#Measures of central tendency, spread, and error are included
+
+#Note that N here is 48 because it refers to the number of observations rather than of participants. Each participant has two average observations, one per phase (0, 180).
 ```
 
 #Inferentials - t-test and 2x2 ANOVA
@@ -215,12 +231,19 @@ Aim 1: Paired T-test (phase x recall accuracy in short delay)
 ```{r}
 t_test_st <- t.test(st_0$correctpercentage, st_180$correctpercentage, paired = TRUE)
 
+#Paired because all short-term participants (within-subject)
+
 print(t_test_st)
+
+library(lsr) #for effect size
+cohensD(st_0$correctpercentage, st_180$correctpercentage)
 ```
 
 Aim 2: Paired T-test (phase x recall accuracy in long delay)
 ```{r}
 t_test_lt <- t.test(lt_0$correctpercentage, lt_180$correctpercentage, paired = TRUE)
+
+#Paired because all long-term participants (within-subject)
 
 print(t_test_lt)
 ```
@@ -230,164 +253,15 @@ Aim 2.1: 2x2 ANOVA (phase and delay x recall accuracy)
 anova_phase_delay <- aov(correctpercentage ~ delay * phase_word, data = general)
 summary(anova_phase_delay)
 
-posthoc <- TukeyHSD(anova_phase_delay)
-print(posthoc)
+library(lsr) #Effect Size
+etaSquared(anova_phase_delay)
+
+#ANOVA testing the effect of the individual factors AND their interaction (*)
+
+#TukeyHSD(anova_phase_delay) #No need for post-hoc test as ANOVA returned non-significant results
 ```
 
-#Visualisation - Figure 4 + alternative visualisations
-
-Computing mean to superimpose
-```{r}
-mean_data <- general %>%
-  group_by(delay, phase) %>%
-  summarise(mean_correctpercentage = mean(correctpercentage))
-```
-
-General graph with two panels (Figure 4)
-```{r}
-general_graph <- general %>%
-  ggplot(aes(x = factor(phase), y = correctpercentage)) +
-  geom_point(alpha = 0.2) +
-  geom_line(alpha = 0.2, aes(group = participant)) +
-  geom_point(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 3) +
-  geom_line(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
-  facet_wrap(~delay, labeller = labeller(delay = 
-    c("long" = "Long Delay (24h)",
-      "short" = "Short Delay (5min)"))) +
-  theme_minimal() +
-  xlab("Phase offset (degree)") +
-  ylab("Accuracy in recall task") +
-  theme(axis.text = element_text(size = 16),
-        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) +
-  scale_x_discrete(expand = c(0.1, 0.1))
-
-ggsave("general_graph.png")
-```
-
-Alternative, Individual visualisations for st and lt
-```{r}
-st_graph <- correct_counts %>% ggplot(aes(x = factor(phase), y = correctpercentage, group = participant)) + geom_point(alpha = 0.2) + geom_line(alpha = 0.2) + scale_y_continuous(breaks = seq(0, 1, by = 0.2)) + theme_minimal() + xlab("Phase offset (degree)") + ylab("Accuracy in recall task") + theme(axis.text = element_text(size = 16),  
-        axis.title = element_text(size = 18, face = "bold")) + scale_x_discrete(expand = c(0.1, 0.1))
-
-ggsave("st_graph.png")
-```
-```{r}
-lt_graph <- correct_counts_lt %>% ggplot(aes(x = factor(phase), y = correctpercentage, group = participant)) + geom_point(alpha = 0.2) + geom_line(alpha = 0.2) + scale_y_continuous(breaks = seq(0, 1, by = 0.2)) + theme_minimal() + xlab("Phase offset (degree)") + ylab("Accuracy in recall task") + theme(axis.text = element_text(size = 16),  
-        axis.title = element_text(size = 18, face = "bold")) + scale_x_discrete(expand = c(0.1, 0.1))
-```
-
-##Section 3.4 - The TIME effect and sleep – subjective quality and quantity effects
-
-#Descriptives
-```{r}
-quantity_descriptives <- general_sleep %>% group_by(delay) %>% summarise(meanquantity = mean(Quantity), sdquantity = sd(Quantity))
-```
-
-#Visualisation
-
-Visualising Aim 3
-```{r}
-general_sleep %>% ggplot(aes(x = phase_word, y = correctpercentage, colour = Quality)) + geom_boxplot() + facet_wrap(~delay)
-```
-```{r}
-general_sleep %>% filter(delay == "short") %>% ggplot(aes(x = phase_word, y = correctpercentage, colour = Quality)) + geom_point() + geom_boxplot()
-```
-```{r}
-general_sleep %>% filter(phase_word == "zero") %>% ggplot(aes(x = Quantity, y = correctpercentage, colour = delay)) + geom_point()
-```
-
-```{r}
-ggplot(general_sleep, aes(x = Quantity, y = correctpercentage, color = phase_word)) +
-  geom_point() + geom_smooth(method = "lm", se = TRUE, aes(group = phase_word)) +
-  facet_wrap(~delay) +
-  labs(title = "Scatter Plot of Recall Accuracy by Quantity, Faceted by Delay and Phase",
-       x = "Quantity", y = "Recall Accuracy")
-```
-
-```{r}
-ggplot(general_sleep, aes(x = delay, y = correctpercentage, fill = factor(phase_word))) +
-  geom_boxplot() +
-  facet_grid(. ~ Quality) +
-  xlab("Delay") +
-  ylab("Correct Percentage") +
-  theme_minimal()
-```
-```{r}
-ggplot(general_sleep, aes(x = phase_word, y = correctpercentage, color = factor(factor(Quality)), group = participant)) +
-  geom_point(size = 2) + geom_line() +
-  facet_grid(. ~ delay) +
-  xlab("Qualityy") +
-  ylab("Correct Percentage") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(general_sleep, aes(x = phase_word, y = correctpercentage, color = factor(factor(Quantity)), group = participant)) +
-  geom_point(size = 2) + geom_line() +
-  facet_grid(. ~ delay) +
-  xlab("Quantity") +
-  ylab("Correct Percentage") +
-  theme_minimal()
-```
-
-```{r}
-ggplot(general_sleep, aes(x = Quantity, y = correctpercentage, color = phase_word)) +
-  geom_point(size = 2) + geom_smooth(method = "lm", se = FALSE, aes(group = phase_word)) +
-  facet_grid(. ~ delay) +
-  xlab("Quantity") +
-  ylab("Correct Percentage") +
-  theme_minimal()
-```
-
-```{r}
-general_sleep %>% ggplot(aes(x = Quantity, y = correctpercentage)) + geom_point() + geom_smooth(method = "lm", se = TRUE)
-```
-
-#Inferential 
-Aim 3.1: 4x2x2 MANOVA (sleep quality, delay, phase x recall accuracy)
-```{r}
-Sleep_anova <- aov(correctpercentage ~ delay + phase_word + Quality, data = general_sleep)
-
-summary(Sleep_anova)
-```
-
-```{r}
-tukey_sleep <- TukeyHSD(Sleep_anova)
-print(tukey_sleep)
-```
-
-```{r}
-quantity_model <- lm(correctpercentage ~ Quantity + delay * phase_word, data = general_sleep)
-
-
-summary(quantity_model)
-```
-
-```{r}
-quantity_model1 <- lm(correctpercentage ~ Quantity * delay * phase_word, data = general_sleep)
-
-summary(quantity_model1)
-```
-
-#Alternative, simpler models for model selection (all non-significant, thus unreported)
-```{r}
-general_sleep_short <- general_sleep %>% filter(delay == "short")
-
-sleepshortmodel <- lm(correctpercentage ~ Quantity * phase_word, data = general_sleep_short)
-
-summary(sleepshortmodel)
-```
-```{r}
-general_sleep_long <- general_sleep %>% filter(delay == "long")
-
-sleeplongmodel <- lm(correctpercentage ~ Quantity * phase_word, data = general_sleep_long)
-
-summary(sleeplongmodel)
-```
-
-##Section 3.5 - 
-
-##Section 3.6 - Chance level performance control
+#Section 3.3.1 - Chance level performance control
 ```{r}
 # Set the probability of success for a four-option task
 probability_of_success <- 1/4
@@ -406,78 +280,558 @@ cat("Chance Level:", chance_level, "\n")
 cat("95% Confidence Interval:", confidence_interval[1], "-", confidence_interval[2], "\n")
 
 #Find participants who performed at chance level or below
-general_filtered <- general %>% filter(correct_responses < 5)
+general_filtered <- general %>% filter(correct_responses > 5)
+
+#The last object contains data from participants exclusively performing above chance level
 ```
+
 #Rerun analyses filtered for participant performing at chance level
 ```{r}
+descriptives_filtered <- general_filtered %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(48), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
+    ci_upper = t.test(correctpercentage)$conf.int[2])
 
+
+anova_filtered <- aov(correctpercentage ~ delay * phase_word, data = general_filtered)
+summary(anova_filtered)
+
+#TukeyHSD(anova_filtered) #No need as ANOVA is still non-significant
+
+etaSquared(anova_filtered)
 ```
 
+#Visualisation - Figure 4 + alternative visualisations
+
+Computing mean to superimpose
+```{r}
+mean_data <- general %>%
+  group_by(delay, phase) %>%
+  summarise(mean_correctpercentage = mean(correctpercentage))
+
+mean_data_filtered <- general_filtered %>%
+  group_by(delay, phase) %>%
+  summarise(mean_correctpercentage = mean(correctpercentage))
+```
+
+Final graph with two panels and distribution plots (unfiltered)
+```{r}
+library(see) #For half violins with dots geom_violindot()
+
+
+panel <- general %>% ggplot(
+       mapping = aes(x = factor(phase), y = correctpercentage)) +
+  geom_violindot(aes(fill = factor(phase)),
+                 dots_alpha = 0.8,
+                 dots_size = 0.2,
+                 position_dots = position_dodge(0.1),
+                 flip = c(3)) +
+  geom_line(alpha = 0.2, aes(group = participant)) +
+  geom_point(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
+  geom_line(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("short" = "Short Delay (5min)",
+      "long" = "Long Delay (24h)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in recall task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1)) + scale_fill_manual(values = c("#a8c4e0", "#495669")) + guides(fill = FALSE)
+
+ggsave("panel.jpg")
+```
+
+
+
+Final graph with two panels and distribution plots (filtered)
+```{r}
+library(see) #For half violins
+
+panel_filter <- ggplot(data = general_filtered,
+       mapping = aes(x = factor(phase), y = correctpercentage)) +
+  geom_violindot(aes(fill = factor(phase)),
+                 dots_alpha = 0.8,  # Adjust transparency
+                 dots_size = 0.2,   # Adjust size
+                 position_dots = position_dodge(0.1),
+                 flip = c(3)) +
+  geom_line(alpha = 0.2, aes(group = participant)) +
+  geom_point(data = mean_data_filtered, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
+  geom_line(data = mean_data_filtered, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in recall task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1)) + scale_y_continuous(breaks = c(0.2, 0.4, 0.6, 0.8, 1)) + scale_fill_manual(values = c("#a8c4e0", "#495669")) + guides(fill = FALSE)
+
+ggsave("panel_filter.jpg")
+
+```
+ALternative faceted visualisations
+```{r}
+general %>%
+  ggplot(aes(x = factor(phase), y = correctpercentage)) +
+  geom_point(alpha = 0.2) +
+  geom_line(alpha = 0.2, aes(group = participant)) +
+  geom_point(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 3) +
+  geom_line(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in recall task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1))
+
+#Graph without distribution plots - not included
+```
+
+```{r}
+general %>%
+  ggplot(aes(x = factor(phase), y = correctpercentage)) +
+  geom_point(alpha = 0.2) +
+  geom_line(alpha = 0.2, aes(group = participant)) +
+  geom_point(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 3) +
+  geom_line(data = mean_data, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  geom_violin(aes(x = factor(phase), y = correctpercentage), position = "identity", scale = "width", alpha = 0.5, fill = "lightblue") +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in recall task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1))
+
+#Graph with overlied distribution graph - not included
+```
+
+Alternative visualisations individually for short and long  delay
+```{r}
+correct_counts_st %>% ggplot(aes(x = factor(phase), y = correctpercentage, group = participant)) + geom_point(alpha = 0.2) + geom_line(alpha = 0.2) + scale_y_continuous(breaks = seq(0, 1, by = 0.2)) + theme_minimal() + xlab("Phase offset (degree)") + ylab("Accuracy in recall task") + theme(axis.text = element_text(size = 16),  
+        axis.title = element_text(size = 18, face = "bold")) + scale_x_discrete(expand = c(0.1, 0.1))
+
+#Not included 
+```
+```{r}
+correct_counts_lt %>% ggplot(aes(x = factor(phase), y = correctpercentage, group = participant)) + geom_point(alpha = 0.2) + geom_line(alpha = 0.2) + scale_y_continuous(breaks = seq(0, 1, by = 0.2)) + theme_minimal() + xlab("Phase offset (degree)") + ylab("Accuracy in recall task") + theme(axis.text = element_text(size = 16),  
+        axis.title = element_text(size = 18, face = "bold")) + scale_x_discrete(expand = c(0.1, 0.1))
+
+#Not included
+```
+
+##Section 3.3.2: Exploratory Analyses - Nested approach
+```{r}
+#Here we create a non-averaged (nested) dataset by analysis participants' performed trial by trial rather than in percentage. The dependent variable is binomial (TRUE/FALSE).
+
+general_nested <- rbind(st, lt) 
+
+library(lme4) #For mixed effects 
+
+nested_model_interact <- glmer(correct_response ~ phase_word * delay + (1 + phase_word + delay | participant), data = general_nested, family = "binomial") 
+summary(nested_model_interact)
+
+#Non-interacting model
+
+nested_model <- glmer(correct_response ~ phase_word + delay + (1 + phase_word + delay | participant), data = general_nested, family = "binomial") 
+
+summary(nested_model)
+```
+
+---------------------------------------------------------------------------
+
+##Section 3.4 - The TIME effect and sleep – subjective quality and quantity effects
+
+#Descriptives
+```{r}
+descriptives_sleepquantity <- general_sleep %>% group_by(delay) %>% summarise(meanquantity = mean(Quantity), sdquantity = sd(Quantity), sem = sdquantity/sqrt(24), min = min(Quantity), max = max(Quantity), ci_lower = t.test(Quantity)$conf.int[1],
+    ci_upper = t.test(Quantity)$conf.int[2])
+```
+
+#Inferential 
+Aim 3.1: 4x2x2 MANOVA (sleep quality, delay, phase x recall accuracy)
+```{r}
+#ANOVA without interactions
+SleepQuality_anova <- aov(correctpercentage ~ delay + phase_word + Quality, data = general_sleep)
+
+summary(SleepQuality_anova)
+
+etaSquared(SleepQuality_anova)
+
+#ANOVA without interactions
+SleepQuality_anovainteract <- aov(correctpercentage ~ delay + phase_word * Quality, data = general_sleep)
+
+summary(SleepQuality_anovainteract)
+
+#all non-significant interactions
+#TukeyHSD(SleepQuality_anova) #Not needed as ANOVA is non-significant.
+```
+Aim 3.2:GLM (sleep quantity, delay, and phase)
+
+```{r}
+quantity_model <- lm(correctpercentage ~ Quantity + delay + phase_word, data = general_sleep)
+
+summary(quantity_model)
+```
+```{r}
+quantity_model_interact <- lm(correctpercentage ~ Quantity * delay * phase_word, data = general_sleep)
+
+summary(quantity_model_interact)
+```
+```{r}
+quantity_model_semiinteract <- lm(correctpercentage ~ Quantity + delay * phase_word, data = general_sleep)
+
+summary(quantity_model_semiinteract)
+```
+
+```{r}
+quantity_model_simpler <- lm(correctpercentage ~ Quantity + phase_word, data = general_sleep)
+
+summary(quantity_model_simpler)
+```
+```{r}
+general_sleep_short <- general_sleep %>% filter(delay == "short")
+
+quantity_model_onlyshort <- lm(correctpercentage ~ Quantity + phase_word, data = general_sleep_short)
+
+summary(quantity_model_onlyshort)
+
+general_sleep_long <- general_sleep %>% filter(delay == "long")
+
+quantity_model_onlylong <- lm(correctpercentage ~ Quantity + phase_word, data = general_sleep_long)
+
+summary(quantity_model_onlylong)
+
+#All models are non-significant
+```
+
+#Visualisation
+
+Visualising Aim 3
+Figure 6
+```{r}
+mean_data_quality <- general_sleep %>%
+  group_by(delay, phase, Quality) %>%
+  summarise(mean_correctpercentage = mean(correctpercentage))
+
+quality <- ggplot(general_sleep, aes(x = as.factor(phase), y = correctpercentage)) +
+  geom_point(alpha = 0.2) +
+  geom_line(alpha = 0.2, aes(group = participant)) +  
+  geom_point(data = mean_data_quality, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
+  geom_line(data = mean_data_quality, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  facet_grid(delay ~ Quality, labeller = labeller(delay = 
+    c("short" = "Short Delay (5min)",
+      "long" = "Long Delay (24h)"))) +  # Facet wrap according to delay
+  xlab("Phase Offset (degree)") +
+  ylab("Accuracy in Recall Task") +
+  theme_minimal() +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1)) 
+
+ggsave("quality.png")
+```
+
+Figure 7
+```{r}
+quantity <- ggplot(general_sleep, aes(x = Quantity, y = correctpercentage, color = as.factor(phase))) +
+  geom_point() + geom_smooth(method = "lm", se = TRUE, aes(group = phase_word)) +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Sleep quantity (hours)") +
+  ylab("Accuracy in recall task") +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) + labs(color = "Phase offset (degrees)")
+
+ggsave("quantity.png")
+```
+
+
+```{r}
+#Alternative visualisation - not used
+general_sleep %>% ggplot(aes(x = as.factor(phase), y = correctpercentage, colour = Quality)) + geom_boxplot() + facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in recall task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1))
+```
+
+---------------------------------------------------------------------------------------------------------
+
+##Section 3.5 - Perceptual level confound
+
+#Loading and preparing data
+
+```{r}
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/Sync Long P1-20"
+
+# Get a list of all CSV files in the directory
+
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=Sync-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("sync_l_", x), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
+```
+
+```{r}
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/Sync short P1 - 24"
+
+# Get a list of all CSV files in the directory
+
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=Sync-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("sync_s_", x), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
+```
+
+```{r}
+sync_l <- rbind(sync_l_1, sync_l_2, sync_l_3, sync_l_4, sync_l_5, sync_l_6, sync_l_7, sync_l_8, sync_l_9, sync_l_10, sync_l_11, sync_l_12, sync_l_13, sync_l_14, sync_l_15, sync_l_16, sync_l_17, sync_l_18, sync_l_19, sync_l_20, sync_l_21, sync_l_22, sync_l_23, sync_l_24)
+
+sync_s <- rbind(sync_s_1, sync_s_2, sync_s_3, sync_s_4, sync_s_5, sync_s_6, sync_s_7, sync_s_8, sync_s_9, sync_s_10, sync_s_11, sync_s_12, sync_s_13, sync_s_14, sync_s_15, sync_s_16, sync_s_17, sync_s_18, sync_s_19, sync_s_20, sync_s_21, sync_s_22, sync_s_23, sync_s_24) 
+
+sync_s$delay <- "short"
+sync_l$delay <- "long"
+
+sync <- rbind(sync_s, sync_l)
+
+sync <- sync %>% rename(phase_word = `respMat_ 5`, phase = `respMat_ 8`,  correct = respMat_10, participant = `respMat_ 1`, response = respMat_11)
+
+sync <- sync %>% mutate(correct_response = (response == correct))
+
+sync_counts <- sync %>% group_by(participant, phase_word, phase, delay) %>%
+  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE)) %>% mutate(correctpercentage = ((correct_responses/16)))
+```
+
+#Descriptives 
+```{r}
+descriptives_sync <- sync_counts %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(48), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
+    ci_upper = t.test(correctpercentage)$conf.int[2])
+```
+
+#Inferentials
+```{r}
+anova_sync <- aov(correctpercentage ~ delay * phase_word, data = sync_counts)
+summary(anova_sync)
+
+TukeyHSD(anova_sync)
+
+etaSquared(anova_sync)
+```
+
+#Visualisation
+```{r}
+mean_data_sync <- sync_counts %>%
+  group_by(delay, phase) %>%
+  summarise(mean_correctpercentage = mean(correctpercentage))
+
+sync <- sync_counts %>% ggplot(aes(x = as.factor(phase), y = correctpercentage)) +
+  geom_violindot((aes(fill = factor(phase))),
+                dots_alpha = 0.8,  # Adjust transparency
+                 dots_size = 0.2,   # Adjust size
+                 position_dots = position_dodge(0.1),
+                 flip = c(3)) +
+  geom_line(alpha = 0.2, aes(group = participant)) +
+  geom_point(data = mean_data_sync, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
+  geom_line(data = mean_data_sync, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in synchronisation task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1)) + scale_fill_manual(values = c("#a8c4e0", "#495669")) + guides(fill = FALSE)
+
+ggsave("sync.png")
+```
+#Chance level in synchrony
+```{r}
+# Set the probability of success for a four-option task
+probability_of_success_1 <- 1/2
+
+# Number of trials
+n_1 <- 16
+
+# Calculate chance level
+chance_level_1 <- n_1 * probability_of_success_1
+
+# Calculate 95% confidence interval for chance level
+confidence_interval_1 <- binom.test(chance_level_1, n_1, conf.level = 0.95)$conf.int
+
+# Print results
+cat("Chance Level:", chance_level_1, "\n_1")
+cat("95% Confidence Interval:", confidence_interval_1[1], "-", confidence_interval_1[2], "\n_1")
+
+#Find participants who performed at chance level or below
+sync_filtered <- sync_counts %>% filter(correct_responses > 9)
+
+#No participant performed above chance level
+```
+
+------------------------------------------------------------------------------
+
 ##Section 3.7 - Exploratory Analyses - Emotional confounds analysis
+
 #Data preparation and wrangling
+
 Short Delay Ratings
+```{r}
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/shortrating"
+
+# Get a list of all CSV files in the directory
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=block-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("rating_s", x, "_", y), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
+```
+
 ```{r}
 rating_s <- rbind(rating_s1_1, rating_s1_2, rating_s1_3, rating_s1_4, rating_s1_5, rating_s1_6, rating_s1_7, rating_s1_8, rating_s2_1, rating_s2_2, rating_s2_3, rating_s2_3, rating_s2_4, rating_s2_5, rating_s2_6, rating_s2_7, rating_s2_8, rating_s3_1, rating_s3_2, rating_s3_3, rating_s3_4, rating_s3_5, rating_s3_6, rating_s3_7, rating_s3_8, rating_s4_1, rating_s4_2, rating_s4_3, rating_s4_4, rating_s4_5, rating_s4_6, rating_s4_7, rating_s4_8, rating_s5_1, rating_s5_2, rating_s5_3, rating_s5_4, rating_s5_5, rating_s5_6, rating_s5_7, rating_s5_8, rating_s6_1, rating_s6_2, rating_s6_3, rating_s6_4, rating_s6_5, rating_s6_6, rating_s6_7, rating_s6_8, rating_s7_1, rating_s7_2, rating_s7_3, rating_s7_4, rating_s7_5, rating_s7_6, rating_s7_7, rating_s7_8, rating_s8_1, rating_s8_2, rating_s8_3, rating_s8_4, rating_s8_5, rating_s8_6, rating_s8_7, rating_s8_8, rating_s9_1,rating_s9_2, rating_s9_3, rating_s9_4, rating_s9_5, rating_s9_6, rating_s9_7, rating_s9_8, rating_s10_1, rating_s10_2, rating_s10_3, rating_s10_4, rating_s10_5, rating_s10_6, rating_s10_7, rating_s10_8, rating_s11_1, rating_s11_2, rating_s11_3, rating_s11_4, rating_s11_5, rating_s11_6, rating_s11_7, rating_s11_8, rating_s12_1, rating_s12_2, rating_s12_3, rating_s12_4, rating_s12_5, rating_s12_6, rating_s12_7,rating_s12_8, rating_s13_1, rating_s13_2, rating_s13_3, rating_s13_4, rating_s13_5, rating_s13_6, rating_s13_7, rating_s13_8, rating_s14_1, rating_s14_2, rating_s14_3, rating_s14_4, rating_s14_5, rating_s14_6, rating_s14_7, rating_s14_8, rating_s15_1, rating_s15_2, rating_s15_3, rating_s15_4, rating_s15_5, rating_s15_6, rating_s15_7, rating_s15_8, rating_s16_1, rating_s16_2, rating_s16_3, rating_s16_4, rating_s16_5, rating_s16_6, rating_s16_7, rating_s16_8, rating_s17_1, rating_s17_2, rating_s17_3, rating_s17_4, rating_s17_5, rating_s17_6, rating_s17_7, rating_s17_8, rating_s18_1, rating_s18_2, rating_s18_3, rating_s18_4, rating_s18_5, rating_s18_6, rating_s18_7, rating_s18_8, rating_s19_1, rating_s19_2, rating_s19_3, rating_s19_4, rating_s19_5, rating_s19_6, rating_s19_7, rating_s19_8, rating_s20_1, rating_s20_2, rating_s20_3, rating_s20_4, rating_s20_5, rating_s20_6, rating_s20_7, rating_s20_8, rating_s21_1, rating_s21_2, rating_s21_3, rating_s21_4, rating_s21_5, rating_s21_6, rating_s21_7, rating_s21_8, rating_s22_1, rating_s22_2, rating_s22_3, rating_s22_4, rating_s22_5, rating_s22_6, rating_s22_7, rating_s22_8, rating_s23_1, rating_s23_2, rating_s23_3, rating_s23_4, rating_s23_5, rating_s23_6, rating_s23_7, rating_s23_8, rating_s24_1, rating_s24_2, rating_s24_3, rating_s24_4, rating_s24_5, rating_s24_6, rating_s24_7, rating_s24_8)
 ```
 
 Long Delay Ratings
 ```{r}
-rating_l <- rbind(rating_l1_1, rating_l1_2, rating_l1_3, rating_l1_4, rating_l1_5, rating_l1_6, rating_l1_7, rating_l1_8, rating_l2_1, rating_l2_2, rating_l2_3, rating_l2_3, rating_l2_4, rating_l2_5, rating_l2_6, rating_l2_7, rating_l2_8, rating_l3_1, rating_l3_2, rating_l3_3, rating_l3_4, rating_l3_5, rating_l3_6, rating_l3_7, rating_l3_8, rating_l4_1, rating_l4_2, rating_l4_3, rating_l4_4, rating_l4_5, rating_l4_6, rating_l4_7, rating_l4_8, rating_l5_1, rating_l5_2, rating_l5_3, rating_l5_4, rating_l5_5, rating_l5_6, rating_l5_7, rating_l5_8, rating_l6_1, rating_l6_2, rating_l6_3, rating_l6_4, rating_l6_5, rating_l6_6, rating_l6_7, rating_l6_8, rating_l7_1, rating_l7_2, rating_l7_3, rating_l7_4, rating_l7_5, rating_l7_6, rating_l7_7, rating_l7_8, rating_l9_1,rating_l9_2, rating_l9_3, rating_l9_4, rating_l9_5, rating_l9_6, rating_l9_7, rating_l9_8, rating_l10_1, rating_l10_2, rating_l10_3, rating_l10_4, rating_l10_5, rating_l10_6, rating_l10_7, rating_l10_8, rating_l11_1, rating_l11_2, rating_l11_3, rating_l11_4, rating_l11_5, rating_l11_6, rating_l11_7, rating_l11_8, rating_l12_1, rating_l12_2, rating_l12_3, rating_l12_4, rating_l12_5, rating_l12_6, rating_l12_7,rating_l12_8, rating_l13_1, rating_l13_2, rating_l13_3, rating_l13_4, rating_l13_5, rating_l13_6, rating_l13_7, rating_l13_8, rating_l14_1, rating_l14_2, rating_l14_3, rating_l14_4, rating_l14_5, rating_l14_6, rating_l14_7, rating_l14_8, rating_l15_1, rating_l15_2, rating_l15_3, rating_l15_4, rating_l15_5, rating_l15_6, rating_l15_7, rating_l15_8, rating_l16_1, rating_l16_2, rating_l16_3, rating_l16_4, rating_l16_5, rating_l16_6, rating_l16_7, rating_l16_8, rating_l17_1, rating_l17_2, rating_l17_3, rating_l17_4, rating_l17_5, rating_l17_6, rating_l17_7, rating_l17_8, rating_l18_1, rating_l18_2, rating_l18_3, rating_l18_4, rating_l18_5, rating_l18_6, rating_l18_7, rating_l18_8, rating_l19_1, rating_l19_2, rating_l19_3, rating_l19_4, rating_l19_5, rating_l19_6, rating_l19_7, rating_l19_8, rating_l20_1, rating_l20_2, rating_l20_3, rating_l20_4, rating_l20_5, rating_l20_6, rating_l20_7, rating_l20_8) 
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/longrating"
 
-##rating_l21_1, rating_s21_2, rating_s21_3, rating_s21_4, rating_s21_5, rating_s21_6, rating_s21_7, rating_s21_8, rating_s22_1, rating_s22_2, rating_s22_3, rating_s22_4, rating_s22_5, rating_s22_6, rating_s22_7, rating_s22_8, rating_s23_1, rating_s23_2, rating_s23_3, rating_s23_4, rating_s23_5, rating_s23_6, rating_s23_7, rating_s23_8, rating_s24_1, rating_s24_2, rating_s24_3, rating_s24_4, rating_s24_5, rating_s24_6, rating_s24_7, rating_s24_8
+# Get a list of all CSV files in the directory
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=block-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("rating_l", x, "_", y), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
 ```
 
+```{r}
+rating_l <- rbind(rating_l1_1, rating_l1_2, rating_l1_3, rating_l1_4, rating_l1_5, rating_l1_6, rating_l1_7, rating_l1_8, rating_l2_1, rating_l2_2, rating_l2_3, rating_l2_3, rating_l2_4, rating_l2_5, rating_l2_6, rating_l2_7, rating_l2_8, rating_l3_1, rating_l3_2, rating_l3_3, rating_l3_4, rating_l3_5, rating_l3_6, rating_l3_7, rating_l3_8, rating_l4_1, rating_l4_2, rating_l4_3, rating_l4_4, rating_l4_5, rating_l4_6, rating_l4_7, rating_l4_8, rating_l5_1, rating_l5_2, rating_l5_3, rating_l5_4, rating_l5_5, rating_l5_6, rating_l5_7, rating_l5_8, rating_l6_1, rating_l6_2, rating_l6_3, rating_l6_4, rating_l6_5, rating_l6_6, rating_l6_7, rating_l6_8, rating_l7_1, rating_l7_2, rating_l7_3, rating_l7_4, rating_l7_5, rating_l7_6, rating_l7_7, rating_l7_8,rating_l8_1, rating_l8_2, rating_l8_3, rating_l8_4, rating_l8_5, rating_l8_6, rating_l8_7, rating_l8_8, rating_l9_1,rating_l9_2, rating_l9_3, rating_l9_4, rating_l9_5, rating_l9_6, rating_l9_7, rating_l9_8, rating_l10_1, rating_l10_2, rating_l10_3, rating_l10_4, rating_l10_5, rating_l10_6, rating_l10_7, rating_l10_8, rating_l11_1, rating_l11_2, rating_l11_3, rating_l11_4, rating_l11_5, rating_l11_6, rating_l11_7, rating_l11_8, rating_l12_1, rating_l12_2, rating_l12_3, rating_l12_4, rating_l12_5, rating_l12_6, rating_l12_7,rating_l12_8, rating_l13_1, rating_l13_2, rating_l13_3, rating_l13_4, rating_l13_5, rating_l13_6, rating_l13_7, rating_l13_8, rating_l14_1, rating_l14_2, rating_l14_3, rating_l14_4, rating_l14_5, rating_l14_6, rating_l14_7, rating_l14_8, rating_l15_1, rating_l15_2, rating_l15_3, rating_l15_4, rating_l15_5, rating_l15_6, rating_l15_7, rating_l15_8, rating_l16_1, rating_l16_2, rating_l16_3, rating_l16_4, rating_l16_5, rating_l16_6, rating_l16_7, rating_l16_8, rating_l17_1, rating_l17_2, rating_l17_3, rating_l17_4, rating_l17_5, rating_l17_6, rating_l17_7, rating_l17_8, rating_l18_1, rating_l18_2, rating_l18_3, rating_l18_4, rating_l18_5, rating_l18_6, rating_l18_7, rating_l18_8, rating_l19_1, rating_l19_2, rating_l19_3, rating_l19_4, rating_l19_5, rating_l19_6, rating_l19_7, rating_l19_8, rating_l20_1, rating_l20_2, rating_l20_3, rating_l20_4, rating_l20_5, rating_l20_6, rating_l20_7, rating_l20_8, rating_l21_1, rating_l21_2, rating_l21_3, rating_l21_4, rating_l21_5, rating_l21_6, rating_l21_7, rating_l21_8, rating_l22_1, rating_l22_2, rating_l22_3, rating_l22_4, rating_l22_5, rating_l22_6, rating_l22_7, rating_l22_8, rating_l23_1, rating_l23_2, rating_l23_3, rating_l23_4, rating_l23_5, rating_l23_6, rating_l23_7, rating_l23_8, rating_l24_1, rating_l24_2, rating_l24_3, rating_l24_4, rating_l24_5, rating_l24_6, rating_l24_7, rating_l24_8)
+```
+
+Merged data 
 ```{r}
 rating_s$delay <- "short"
 rating_l$delay <- "long"
 Rating <- rbind(rating_s, rating_l)
 Rating <- Rating %>% rename(phase_word = `respMat_ 6`, phase = `respMat_ 8`,  rating = respMat_10, participant = `respMat_ 1`, movie = `respMat_ 5`, sound = `respMat_ 7`)
+
+#Rating contains every trial of all eight rating blocks and the corresponding subjective ratings
 ```
 
+#Rearranging general datasets to match column headings
 ```{r}
 st_rating <- st %>% rename(movie = `testrespMat_ 5`, sound = `testrespMat_ 7`)
 lt_rating <- lt %>% rename(movie = `testrespMat_ 5`, sound = `testrespMat_ 7`)
-st_rating$delay <- "short"
-lt_rating$delay <- "long"
 total <- rbind(st_rating, lt_rating)
+#total contains all the trials by each participant and whether the given response was accurate (TRUE) or inaccurate (FALSE).
 
-total_desc <- total %>% group_by(movie, sound, phase_word, participant) %>% summarise()
+total_rating <- merge(total, Rating, by = c("participant", "movie", "sound", "phase", "delay"))
 
-rating_desc <- Rating %>% group_by(participant, movie, sound, phase_word) %>% summarise(mean_rating = mean(rating))
+#total_rating_tidy <- total_rating %>% group_by(participant, rating, phase, delay) %>% summarise(correct_performance = sum(correct_response == TRUE), incorrect_performance = sum(correct_response == FALSE))
 
-total_rating <- merge(total, rating_desc, by = c("participant", "movie", "sound"))
+#total_rating_tidy contains the number of correctly recalled audiovisual pairs based on the rating, phase, and delay conditions.
 
-total_rating1 <- merge(total, Rating, by = c("participant", "movie", "sound"))
+```
+
+#Inferentials
+```{r}
+total_rating_s <- total_rating %>% filter(delay == "short")
+glm_rating_s <- glm(correct_response ~ as.factor(phase) * as.factor(rating), data = total_rating_s)
+
+summary(glm_rating_s)
+```
+
+```{r}
+library(lme4) #For mixed effects 
+
+control_params <- glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 100000))
+
+model <- glmer(
+  correct_response ~ as.factor(rating) * as.factor(phase) * delay +
+    (1 + as.factor(phase) + delay + as.factor(rating) | participant),
+  data = total_rating,
+  family = binomial,
+  control = control_params
+)
+
+summary(model)
+```
+```{r}
+model <- glmer(
+  correct_response ~ as.factor(rating) + as.factor(phase) + delay +
+    (1 + as.factor(phase) + delay + as.factor(rating) | participant),
+  data = total_rating,
+  family = binomial,
+  control = control_params
+)
+
+summary(model)
 ```
 
 #Visualisations
-```{r}
-ggplot(total_rating1, aes(x = rating, fill = factor(correct_response))) +
-  geom_bar(position = "dodge", stat = "count") +
-  scale_fill_manual(values = c("blue", "red"), name = "Correct Response") +
-  labs(title = "Relationship between Rating and Correct Response",
-       x = "Rating", y = "Count") +
-  theme_minimal() + facet_wrap(~as.factor(phase.x))
-```
-```{r}
-total_rating_tidy <- total_rating1 %>% group_by(participant, rating) %>% summarise(correct_performance = sum(correct_response == TRUE), incorrect_performance = sum(correct_response == FALSE))
-
-rating_tidy <- Rating %>% group_by(participant, movie, sound, delay, phase) %>% summarise(rating = mean(rating))
-
-total_rating1 <- merge(total, rating_tidy, by = c("participant", "movie", "sound")) %>% group_by(participant, rating, phase.x, delay.x) %>% summarise(correct_performance = sum(correct_response == TRUE))
-```
 
 ```{r}
-ggplot(total_rating1, aes(x = rating, y = correct_performance, colour = as.factor(phase.x))) + geom_point() + geom_smooth(method = "lm", se = TRUE) + facet_wrap(~delay.x) + theme_minimal()
+rating <- ggplot(total_rating, aes(x = factor(rating), fill = correct_response)) + geom_bar(position = "dodge", stat = "count") + facet_wrap(as.factor(phase) ~ delay, labeller = labeller(delay = c("short" = "Short Delay (5min)", "long" = "Long Delay (24h)")))  + theme_minimal() + ylab("Number of trials") + xlab("Subjective Rating") + scale_fill_manual(values = c("#a8c4e0", "#495669"), name = "Correct Response") + theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        strip.text = element_text(size = 14)) 
+
+ggsave("rating.png")
 ```
-
-#Inferential
-```{r}
-glm_rating <- glm(correct_performance ~ phase.x * rating * delay.x, data = total_rating1)
-
-summary(glm_rating)
-```
-
 
 
 
