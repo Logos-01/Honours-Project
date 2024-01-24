@@ -14,137 +14,78 @@ Prior to any analysis, I conduct data preparation steps including loading librar
 #Loading libraries needed
 ```{r}
 library(tidyverse)
-library(car)
 ```
 
 #Loadind Short Delay Memory Data 
 ```{r}
-st1_1 <- read_csv("subj1-block-1-Test.csv")
-st1_2 <- read_csv("subj1-block-2-Test.csv")
-st2_1 <- read_csv("subj2-block-1-Test.csv")
-st2_2 <- read_csv("subj2-block-2-Test.csv")
-st3_1 <- read_csv("subj3-block-1-Test.csv")
-st3_2 <- read_csv("subj3-block-2-Test.csv")
-st4_1 <- read_csv("subj4-block-1-Test.csv")
-st4_2 <- read_csv("subj4-block-2-Test.csv")
-st5_1 <- read_csv("subj5-block-1-Test.csv")
-st5_2 <- read_csv("subj5-block-2-Test.csv")
-st6_1 <- read_csv("subj6-block-1-Test.csv")
-st6_2 <- read_csv("subj6-block-2-Test.csv")
-st7_1 <- read_csv("subj7-block-1-Test.csv")
-st7_2 <- read_csv("subj7-block-2-Test.csv")
-st8_1 <- read_csv("subj8-block-1-Test copy.csv")
-st8_2 <- read_csv("subj8-block-2-Test copy.csv")
-st9_1 <- read_csv("subj8-block-1-Test.csv")
-st9_2 <- read_csv("subj9-block-2-Test.csv")
-st10_1 <- read_csv("subj10-block-1-Test.csv")
-st10_2 <- read_csv("subj10-block-2-Test.csv")
-st11_1 <- read_csv("subj11-block-1-Test.csv")
-st11_2 <- read_csv("subj11-block-2-Test.csv")
-st12_1 <- read_csv("subj12-block-1-Test.csv")
-st12_2 <- read_csv("subj12-block-2-Test.csv")
-st13_1 <- read_csv("subj13-block-1-Test.csv")
-st13_2 <- read_csv("subj13-block-2-Test.csv")
-st14_1 <- read_csv("subj14-block-1-Test.csv")
-st14_2 <- read_csv("subj14-block-2-Test.csv")
-st15_1 <- read_csv("subj15-block-1-Test.csv")
-st15_2 <- read_csv("subj15-block-2-Test.csv")
-st16_1 <- read_csv("subj16-block-1-Test.csv")
-st16_2 <- read_csv("subj16-block-2-Test.csv")
-st17_1 <- read_csv("subj17-block-1-Test.csv")
-st17_2 <- read_csv("subj17-block-2-Test.csv")
-st18_1 <- read_csv("subj18-block-1-Test.csv")
-st18_2 <- read_csv("subj18-block-2-Test.csv")
-st19_1 <- read_csv("subj19-block-1-Test.csv")
-st19_2 <- read_csv("subj19-block-2-Test.csv")
-st20_1 <- read_csv("subj20-block-1-Test.csv")
-st20_2 <- read_csv("subj20-block-2-Test.csv")
-st21_1 <- read_csv("subj21-block-1-Test.csv")
-st21_2 <- read_csv("subj21-block-2-Test.csv")
-st22_1 <- read_csv("subj22-block-1-Test.csv")
-st22_2 <- read_csv("subj22-block-2-Test.csv")
-st23_1 <- read_csv("subj23-block-1-Test.csv")
-st23_2 <- read_csv("subj23-block-2-Test.csv")
-st24_1 <- read_csv("subj24-block-1-Test.csv")
-st24_2 <- read_csv("subj24-block-2-Test.csv")
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/shortrecall"
+
+# Get a list of all CSV files in the directory
+
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=block-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("st", x, "_", y), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
+
+# Combine all data into a single dataset
+st <- mget(ls(pattern = "^st\\d+_\\d+$")) %>% bind_rows(.id = "file_id")
 ```
+
 #Loading Long Delay Memory Data
 ```{r}
-#Long data have the same name so are stored in a subdirectory (/long). Make sure to change directory before running this chunk. 
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/longrecall"
 
-lt1_1 <- read_csv("subj1-block-1-Test.csv")
-lt1_2 <- read_csv("subj1-block-2-Test.csv")
-lt2_1 <- read_csv("subj2-block-1-Test.csv")
-lt2_2 <- read_csv("subj2-block-2-Test.csv")
-lt3_1 <- read_csv("subj3-block-1-Test.csv")
-lt3_2 <- read_csv("subj3-block-2-Test.csv")
-lt4_1 <- read_csv("subj4-block-1-Test.csv")
-lt4_2 <- read_csv("subj4-block-2-Test.csv")
-lt5_1 <- read_csv("subj5-block-1-Test.csv")
-lt5_2 <- read_csv("subj5-block-2-Test.csv")
-lt6_1 <- read_csv("subj6-block-1-Test.csv")
-lt6_2 <- read_csv("subj6-block-2-Test.csv")
-lt7_1 <- read_csv("subj7-block-1-Test.csv")
-lt7_2 <- read_csv("subj7-block-2-Test.csv")
-lt8_1 <- read_csv("subj8-block-1-Test.csv")
-lt8_2 <- read_csv("subj8-block-2-Test.csv")
-lt9_1 <- read_csv("subj9-block-1-Test.csv")
-lt9_2 <- read_csv("subj9-block-2-Test.csv")
-lt10_1 <- read_csv("subj10-block-1-Test.csv")
-lt10_2 <- read_csv("subj10-block-2-Test.csv")
-lt11_1 <- read_csv("subj11-block-1-Test.csv")
-lt11_2 <- read_csv("subj11-block-2-Test.csv")
-lt12_1 <- read_csv("subj12-block-1-Test.csv")
-lt12_2 <- read_csv("subj12-block-2-Test.csv")
-lt13_1 <- read_csv("subj13-block-1-Test.csv")
-lt13_2 <- read_csv("subj13-block-2-Test.csv")
-lt14_1 <- read_csv("subj14-block-1-Test.csv")
-lt14_2 <- read_csv("subj14-block-2-Test.csv")
-lt15_1 <- read_csv("subj15-block-1-Test.csv")
-lt15_2 <- read_csv("subj15-block-2-Test.csv")
-lt16_1 <- read_csv("subj16-block-1-Test.csv")
-lt16_2 <- read_csv("subj16-block-2-Test.csv")
-lt17_1 <- read_csv("subj17-block-1-Test.csv")
-lt17_2 <- read_csv("subj17-block-2-Test.csv")
-lt18_1 <- read_csv("subj18-block-1-Test.csv")
-lt18_2 <- read_csv("subj18-block-2-Test.csv")
-lt19_1 <- read_csv("subj19-block-1-Test.csv")
-lt19_2 <- read_csv("subj19-block-2-Test.csv")
-lt20_1 <- read_csv("subj20-block-1-Test.csv")
-lt20_2 <- read_csv("subj20-block-2-Test.csv")
-lt21_1 <- read_csv("subj21-block-1-Test.csv")
-lt21_2 <- read_csv("subj21-block-2-Test.csv")
-lt22_1 <- read_csv("subj22-block-1-Test.csv")
-lt22_2 <- read_csv("subj22-block-2-Test.csv")
-lt23_1 <- read_csv("subj23-block-1-Test.csv")
-lt23_2 <- read_csv("subj23-block-2-Test.csv")
-lt24_1 <- read_csv("subj24-block-1-Test.csv")
-lt24_2 <- read_csv("subj24-block-2-Test.csv")
+# Get a list of all CSV files in the directory
+
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=block-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("lt", x, "_", y), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
+
+# Combine all data into a single dataset
+lt <- mget(ls(pattern = "^lt\\d+_\\d+$")) %>% bind_rows(.id = "file_id")
 ```
+
 #Loading sleep results for short and long
 ```{r}
 sleep_short <- read_csv("Sleep_short.csv")
 sleep_long <- read_csv("Sleep_long.csv")
 ```
-#Merging all short delay memory data into one dataset
+#Adding a column for delay
 ```{r}
-st <- rbind(st1_1, st1_2, st2_1, st2_2, st3_1, st3_2, st4_1, st4_2, st5_1, st5_2, st6_1, st6_2, st7_1, st7_2, st8_1, st8_2, st9_1, st9_2, st10_1, st10_2, st11_1, st11_2, st12_1, st12_2, st13_1, st13_2, st14_1, st14_2, st15_1, st15_2, st16_1, st16_2, st17_1, st17_2, st18_1, st18_2, st19_1, st19_2, st20_1, st20_2, st21_1, st21_2, st22_1, st22_2, st23_1, st23_2, st24_1, st24_2)
-
 st$delay <- "short"
-```
-#Merging all long delay memory data into one dataset
-```{r}
-lt <- rbind(lt1_1, lt1_2, lt2_1, lt2_2, lt3_1, lt3_2, lt4_1, lt4_2, lt5_1, lt5_2, lt6_1, lt6_2, lt7_1, lt7_2, lt8_1, lt8_2, lt9_1, lt9_2, lt10_1, lt10_2, lt11_1, lt11_2, lt12_1, lt12_2, lt13_1, lt13_2, lt14_1, lt14_2, lt15_1, lt15_2, lt16_1, lt16_2, lt17_1, lt17_2, lt18_1, lt18_2, lt19_1, lt19_2, lt20_1, lt20_2, lt21_1, lt21_2, lt22_1, lt22_2, lt23_1, lt23_2, lt24_1, lt24_2)
-
 lt$delay <- "long"
 ```
+
 #Renaming column headings for clarity in st and lt 
 ```{r}
-st <- st %>% rename(phase_word = `testrespMat_ 6`, phase = `testrespMat_ 8`, response = testrespMat_14, correct = testrespMat_15, participant = `testrespMat_ 1`)
-```
+st <- st %>% rename(phase_word = `testrespMat_ 6`, phase = `testrespMat_ 8`, correct = testrespMat_14, response = testrespMat_15, participant = `testrespMat_ 1`)
 
-```{r}
-lt <- lt %>% rename(phase_word = `testrespMat_ 6`, phase = `testrespMat_ 8`, response = testrespMat_14, correct = testrespMat_15, participant = `testrespMat_ 1`)
+lt <- lt %>% rename(phase_word = `testrespMat_ 6`, phase = `testrespMat_ 8`, correct = testrespMat_14, response = testrespMat_15, participant = `testrespMat_ 1`)
+
+#Please note that testrespMat columns were renamed based on a ReadMe file containing paradigm script's specification
 ```
 
 ----------------------------------------------------------------------------
@@ -155,13 +96,11 @@ Here, I start rearranging the data to match my testing aims, hence computing the
 #Creating a column for correct responses in short and long delay memory
 ```{r}
 st <- st %>% mutate(correct_response = (response == correct))
-```
 
-```{r}
 lt <- lt %>% mutate(correct_response = (response == correct))
 ```
 
-#Counting right answers for each participant and each phase offset (short & long)
+#Counting right answers for each participant and each phase offset (short & long), then merging together
 ```{r}
 correct_counts_st <- st %>% group_by(participant, phase_word, phase, delay) %>%
   summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
@@ -170,23 +109,22 @@ correct_counts_st <- correct_counts_st %>% mutate(correctpercentage = ((correct_
 correct_counts_lt <- lt %>% group_by(participant, phase_word, phase, delay) %>%
   summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
 correct_counts_lt <- correct_counts_lt %>% mutate(correctpercentage = ((correct_responses/16)))
-```
-#Merging together short and long delay for memory and sleep
-```{r}
+
+#Please note that 16 here reflects the number of trials per phase offset across the two blocks.
+
 general <- rbind(correct_counts_lt, correct_counts_st)
 ```
 
+#Merging together sleep and memory data
 ```{r}
 sleep <- rbind(sleep_long, sleep_short)
 colnames(sleep)[colnames(sleep) == "Participant"] <- "participant"
 colnames(sleep)[colnames(sleep) == "Delay"] <- "delay"
-```
 
-```{r}
 general_sleep <- merge(general, sleep, by = c("participant", "delay"))
 ```
 
-------------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
 Now that the data are ready, we can proceed with the Results structure.
 
@@ -194,13 +132,17 @@ Now that the data are ready, we can proceed with the Results structure.
 
 #Data preparation and Assumptions Check
 ```{r}
-hist(correct_counts_st$correctpercentage) #Included in Appendix
-hist(correct_counts_lt$correctpercentage) #Included in Appendix
+hist(correct_counts_st$correctpercentage, xlab = "Recall Accuracy") #Included in Appendix
+
+
+hist(correct_counts_lt$correctpercentage, xlab = "Recall Accuracy") #Included in Appendix
+
+
 shapiro.test(correct_counts_st$correctpercentage)
 shapiro.test(correct_counts_lt$correctpercentage)
-bartlett.test(general$correctpercentage, general$phase_word)
+bartlett.test(general$correctpercentage, general$phase)
 
-
+#Data must be filtered per phase for t_test() function
 st_0 <- correct_counts_st %>% filter(phase_word == 'zero')
 st_180 <- correct_counts_st %>% filter(phase_word == 'oneeighty')
 
@@ -214,15 +156,14 @@ lt_180 <- correct_counts_lt %>% filter(phase_word == 'oneeighty')
 
 #Descriptives - by phase and delay (Table 2)
 ```{r}
-#Merging altogether
-descriptives_correct <- rbind(descriptives_short, descriptives_long)
+#Calculating descriptive statistics of recall accuracy across phase and delay conditions
 
-descriptives_correct <- general %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(48), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
+descriptives_correct <- general %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(24), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
     ci_upper = t.test(correctpercentage)$conf.int[2])
 
 #Measures of central tendency, spread, and error are included
 
-#Note that N here is 48 because it refers to the number of observations rather than of participants. Each participant has two average observations, one per phase (0, 180).
+#Note that when computing the standard error of the mean, N here is 24 because each participant in each group has two average observations (one for 0°, one for 180°).This would lead to 48 averages (24 per phase) in the short delay and 48 (24 per phase) in the long delay. Since the standard error of the mean is specific to the mean recall accuracy for each phase within each delay group, then we should divide by 24.
 ```
 
 #Inferentials - t-test and 2x2 ANOVA
@@ -246,6 +187,8 @@ t_test_lt <- t.test(lt_0$correctpercentage, lt_180$correctpercentage, paired = T
 #Paired because all long-term participants (within-subject)
 
 print(t_test_lt)
+
+cohensD(lt_0$correctpercentage, lt_180$correctpercentage)
 ```
 
 Aim 2.1: 2x2 ANOVA (phase and delay x recall accuracy)
@@ -258,7 +201,7 @@ etaSquared(anova_phase_delay)
 
 #ANOVA testing the effect of the individual factors AND their interaction (*)
 
-#TukeyHSD(anova_phase_delay) #No need for post-hoc test as ANOVA returned non-significant results
+TukeyHSD(anova_phase_delay) 
 ```
 
 #Section 3.3.1 - Chance level performance control
@@ -340,9 +283,6 @@ panel <- general %>% ggplot(
 
 ggsave("panel.jpg")
 ```
-
-
-
 Final graph with two panels and distribution plots (filtered)
 ```{r}
 library(see) #For half violins
@@ -473,6 +413,7 @@ summary(SleepQuality_anovainteract)
 #all non-significant interactions
 #TukeyHSD(SleepQuality_anova) #Not needed as ANOVA is non-significant.
 ```
+
 Aim 3.2:GLM (sleep quantity, delay, and phase)
 
 ```{r}
@@ -480,6 +421,12 @@ quantity_model <- lm(correctpercentage ~ Quantity + delay + phase_word, data = g
 
 summary(quantity_model)
 ```
+```{r}
+quantity_model_diff <- lm(difference ~ Quantity + delay, data = difference_sleep)
+
+summary(quantity_model_diff)
+```
+
 ```{r}
 quantity_model_interact <- lm(correctpercentage ~ Quantity * delay * phase_word, data = general_sleep)
 
@@ -515,13 +462,25 @@ summary(quantity_model_onlylong)
 #Visualisation
 
 Visualising Aim 3
+```{r}
+difference_sleep %>% ggplot(aes(x = Quality, y = difference)) + geom_point() + geom_boxplot() + facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal()  +
+  xlab("Rating") +
+  ylab("Recall difference (0° - 180°)") +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) 
+```
+
 Figure 6
 ```{r}
 mean_data_quality <- general_sleep %>%
   group_by(delay, phase, Quality) %>%
   summarise(mean_correctpercentage = mean(correctpercentage))
 
-quality <- ggplot(general_sleep, aes(x = as.factor(phase), y = correctpercentage)) +
+#quality <- 
+  ggplot(general_sleep, aes(x = as.factor(phase), y = correctpercentage)) +
   geom_point(alpha = 0.2) +
   geom_line(alpha = 0.2, aes(group = participant)) +  
   geom_point(data = mean_data_quality, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
@@ -538,10 +497,26 @@ quality <- ggplot(general_sleep, aes(x = as.factor(phase), y = correctpercentage
 
 ggsave("quality.png")
 ```
-
 Figure 7
 ```{r}
-quantity <- ggplot(general_sleep, aes(x = Quantity, y = correctpercentage, color = as.factor(phase))) +
+Quantity <- difference_sleep %>% ggplot(aes(x = Quantity, y = difference)) + geom_point() + geom_smooth(method = "lm", se = TRUE) + facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal()  +
+  xlab("Sleep quantity (hours)") +
+  ylab("Recall difference (0° - 180°)") +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) 
+
+ggsave("Quantity.png")
+```
+
+
+
+```{r}
+#quantity <- 
+  
+  ggplot(general_sleep, aes(x = Quantity, y = correctpercentage, color = as.factor(phase))) +
   geom_point() + geom_smooth(method = "lm", se = TRUE, aes(group = phase_word)) +
   facet_wrap(~delay, labeller = labeller(delay = 
     c("long" = "Long Delay (24h)",
@@ -569,7 +544,7 @@ general_sleep %>% ggplot(aes(x = as.factor(phase), y = correctpercentage, colour
   scale_x_discrete(expand = c(0.1, 0.1))
 ```
 
----------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------
 
 ##Section 3.5 - Perceptual level confound
 
@@ -577,29 +552,7 @@ general_sleep %>% ggplot(aes(x = as.factor(phase), y = correctpercentage, colour
 
 ```{r}
 # Set the directory path
-directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/Sync Long P1-20"
-
-# Get a list of all CSV files in the directory
-
-file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
-
-# Define a function to read and name the files
-read_and_name <- function(file_path) {
-  # Extract x and y from the file name
-  x <- str_extract(file_path, "(?<=subj)\\d+")
-  y <- str_extract(file_path, "(?<=Sync-)\\d+")
-
-  # Read the CSV file and name it
-  read_csv(file_path) %>% assign(paste0("sync_l_", x), ., envir = .GlobalEnv)
-}
-
-# Use map to apply the function to each file in the list
-file_list %>% map(read_and_name)
-```
-
-```{r}
-# Set the directory path
-directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/Sync short P1 - 24"
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/shortsync"
 
 # Get a list of all CSV files in the directory
 
@@ -617,13 +570,38 @@ read_and_name <- function(file_path) {
 
 # Use map to apply the function to each file in the list
 file_list %>% map(read_and_name)
+
+#Merging them altogether
+sync_s <- mget(ls(pattern = "^sync_s_\\d+$")) %>% bind_rows(.id = "file_id")
+
 ```
 
 ```{r}
-sync_l <- rbind(sync_l_1, sync_l_2, sync_l_3, sync_l_4, sync_l_5, sync_l_6, sync_l_7, sync_l_8, sync_l_9, sync_l_10, sync_l_11, sync_l_12, sync_l_13, sync_l_14, sync_l_15, sync_l_16, sync_l_17, sync_l_18, sync_l_19, sync_l_20, sync_l_21, sync_l_22, sync_l_23, sync_l_24)
+# Set the directory path
+directory_path <- "/Users/giorgiocannavacciuolo/Desktop/HonsProject/longsync"
 
-sync_s <- rbind(sync_s_1, sync_s_2, sync_s_3, sync_s_4, sync_s_5, sync_s_6, sync_s_7, sync_s_8, sync_s_9, sync_s_10, sync_s_11, sync_s_12, sync_s_13, sync_s_14, sync_s_15, sync_s_16, sync_s_17, sync_s_18, sync_s_19, sync_s_20, sync_s_21, sync_s_22, sync_s_23, sync_s_24) 
+# Get a list of all CSV files in the directory
 
+file_list <- list.files(path = directory_path, pattern = "\\.csv$", full.names = TRUE)
+
+# Define a function to read and name the files
+read_and_name <- function(file_path) {
+  # Extract x and y from the file name
+  x <- str_extract(file_path, "(?<=subj)\\d+")
+  y <- str_extract(file_path, "(?<=Sync-)\\d+")
+
+  # Read the CSV file and name it
+  read_csv(file_path) %>% assign(paste0("sync_l_", x), ., envir = .GlobalEnv)
+}
+
+# Use map to apply the function to each file in the list
+file_list %>% map(read_and_name)
+
+#Merging them altogether
+sync_l <- mget(ls(pattern = "^sync_l_\\d+$")) %>% bind_rows(.id = "file_id")
+```
+
+```{r}
 sync_s$delay <- "short"
 sync_l$delay <- "long"
 
@@ -634,12 +612,12 @@ sync <- sync %>% rename(phase_word = `respMat_ 5`, phase = `respMat_ 8`,  correc
 sync <- sync %>% mutate(correct_response = (response == correct))
 
 sync_counts <- sync %>% group_by(participant, phase_word, phase, delay) %>%
-  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE)) %>% mutate(correctpercentage = ((correct_responses/16)))
+  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE)) %>% mutate(correctpercentage = ((correct_responses/8)))
 ```
 
 #Descriptives 
 ```{r}
-descriptives_sync <- sync_counts %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(48), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
+descriptives_sync <- sync_counts %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(24), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
     ci_upper = t.test(correctpercentage)$conf.int[2])
 ```
 
@@ -687,7 +665,7 @@ ggsave("sync.png")
 probability_of_success_1 <- 1/2
 
 # Number of trials
-n_1 <- 16
+n_1 <- 8
 
 # Calculate chance level
 chance_level_1 <- n_1 * probability_of_success_1
@@ -700,9 +678,38 @@ cat("Chance Level:", chance_level_1, "\n_1")
 cat("95% Confidence Interval:", confidence_interval_1[1], "-", confidence_interval_1[2], "\n_1")
 
 #Find participants who performed at chance level or below
-sync_filtered <- sync_counts %>% filter(correct_responses > 9)
+sync_filtered <- sync_counts %>% filter(correct_responses > 5)
 
 #No participant performed above chance level
+anova_sync_filtered <- aov(correctpercentage ~ delay * phase_word, data = sync_filtered)
+summary(anova_sync_filtered)
+
+etaSquared(anova_sync_filtered)
+```
+```{r}
+mean_data_sync_filtered <- sync_filtered %>%
+  group_by(delay, phase) %>%
+  summarise(mean_correctpercentage = mean(correctpercentage))
+
+  sync_filtered %>% ggplot(aes(x = as.factor(phase), y = correctpercentage)) +
+  geom_violindot((aes(fill = factor(phase))),
+                dots_alpha = 0.8,  # Adjust transparency
+                 dots_size = 0.2,   # Adjust size
+                 position_dots = position_dodge(0.1),
+                 flip = c(3)) +
+  geom_line(alpha = 0.2, aes(group = participant)) +
+  geom_point(data = mean_data_sync_filtered, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
+  geom_line(data = mean_data_sync_filtered, aes(x = factor(phase), y = mean_correctpercentage, group = 1), color = "red", size = 1) +
+  facet_wrap(~delay, labeller = labeller(delay = 
+    c("long" = "Long Delay (24h)",
+      "short" = "Short Delay (5min)"))) +
+  theme_minimal() +
+  xlab("Phase offset (degree)") +
+  ylab("Accuracy in synchronisation task") +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"),
+        strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1)) + scale_fill_manual(values = c("#a8c4e0", "#495669")) + guides(fill = FALSE)
 ```
 
 ------------------------------------------------------------------------------
@@ -731,10 +738,9 @@ read_and_name <- function(file_path) {
 
 # Use map to apply the function to each file in the list
 file_list %>% map(read_and_name)
-```
 
-```{r}
-rating_s <- rbind(rating_s1_1, rating_s1_2, rating_s1_3, rating_s1_4, rating_s1_5, rating_s1_6, rating_s1_7, rating_s1_8, rating_s2_1, rating_s2_2, rating_s2_3, rating_s2_3, rating_s2_4, rating_s2_5, rating_s2_6, rating_s2_7, rating_s2_8, rating_s3_1, rating_s3_2, rating_s3_3, rating_s3_4, rating_s3_5, rating_s3_6, rating_s3_7, rating_s3_8, rating_s4_1, rating_s4_2, rating_s4_3, rating_s4_4, rating_s4_5, rating_s4_6, rating_s4_7, rating_s4_8, rating_s5_1, rating_s5_2, rating_s5_3, rating_s5_4, rating_s5_5, rating_s5_6, rating_s5_7, rating_s5_8, rating_s6_1, rating_s6_2, rating_s6_3, rating_s6_4, rating_s6_5, rating_s6_6, rating_s6_7, rating_s6_8, rating_s7_1, rating_s7_2, rating_s7_3, rating_s7_4, rating_s7_5, rating_s7_6, rating_s7_7, rating_s7_8, rating_s8_1, rating_s8_2, rating_s8_3, rating_s8_4, rating_s8_5, rating_s8_6, rating_s8_7, rating_s8_8, rating_s9_1,rating_s9_2, rating_s9_3, rating_s9_4, rating_s9_5, rating_s9_6, rating_s9_7, rating_s9_8, rating_s10_1, rating_s10_2, rating_s10_3, rating_s10_4, rating_s10_5, rating_s10_6, rating_s10_7, rating_s10_8, rating_s11_1, rating_s11_2, rating_s11_3, rating_s11_4, rating_s11_5, rating_s11_6, rating_s11_7, rating_s11_8, rating_s12_1, rating_s12_2, rating_s12_3, rating_s12_4, rating_s12_5, rating_s12_6, rating_s12_7,rating_s12_8, rating_s13_1, rating_s13_2, rating_s13_3, rating_s13_4, rating_s13_5, rating_s13_6, rating_s13_7, rating_s13_8, rating_s14_1, rating_s14_2, rating_s14_3, rating_s14_4, rating_s14_5, rating_s14_6, rating_s14_7, rating_s14_8, rating_s15_1, rating_s15_2, rating_s15_3, rating_s15_4, rating_s15_5, rating_s15_6, rating_s15_7, rating_s15_8, rating_s16_1, rating_s16_2, rating_s16_3, rating_s16_4, rating_s16_5, rating_s16_6, rating_s16_7, rating_s16_8, rating_s17_1, rating_s17_2, rating_s17_3, rating_s17_4, rating_s17_5, rating_s17_6, rating_s17_7, rating_s17_8, rating_s18_1, rating_s18_2, rating_s18_3, rating_s18_4, rating_s18_5, rating_s18_6, rating_s18_7, rating_s18_8, rating_s19_1, rating_s19_2, rating_s19_3, rating_s19_4, rating_s19_5, rating_s19_6, rating_s19_7, rating_s19_8, rating_s20_1, rating_s20_2, rating_s20_3, rating_s20_4, rating_s20_5, rating_s20_6, rating_s20_7, rating_s20_8, rating_s21_1, rating_s21_2, rating_s21_3, rating_s21_4, rating_s21_5, rating_s21_6, rating_s21_7, rating_s21_8, rating_s22_1, rating_s22_2, rating_s22_3, rating_s22_4, rating_s22_5, rating_s22_6, rating_s22_7, rating_s22_8, rating_s23_1, rating_s23_2, rating_s23_3, rating_s23_4, rating_s23_5, rating_s23_6, rating_s23_7, rating_s23_8, rating_s24_1, rating_s24_2, rating_s24_3, rating_s24_4, rating_s24_5, rating_s24_6, rating_s24_7, rating_s24_8)
+# Combine all data into a single dataset
+rating_s <- mget(ls(pattern = "^rating_s\\d+_\\d+$")) %>% bind_rows(.id = "file_id")
 ```
 
 Long Delay Ratings
@@ -757,10 +763,9 @@ read_and_name <- function(file_path) {
 
 # Use map to apply the function to each file in the list
 file_list %>% map(read_and_name)
-```
 
-```{r}
-rating_l <- rbind(rating_l1_1, rating_l1_2, rating_l1_3, rating_l1_4, rating_l1_5, rating_l1_6, rating_l1_7, rating_l1_8, rating_l2_1, rating_l2_2, rating_l2_3, rating_l2_3, rating_l2_4, rating_l2_5, rating_l2_6, rating_l2_7, rating_l2_8, rating_l3_1, rating_l3_2, rating_l3_3, rating_l3_4, rating_l3_5, rating_l3_6, rating_l3_7, rating_l3_8, rating_l4_1, rating_l4_2, rating_l4_3, rating_l4_4, rating_l4_5, rating_l4_6, rating_l4_7, rating_l4_8, rating_l5_1, rating_l5_2, rating_l5_3, rating_l5_4, rating_l5_5, rating_l5_6, rating_l5_7, rating_l5_8, rating_l6_1, rating_l6_2, rating_l6_3, rating_l6_4, rating_l6_5, rating_l6_6, rating_l6_7, rating_l6_8, rating_l7_1, rating_l7_2, rating_l7_3, rating_l7_4, rating_l7_5, rating_l7_6, rating_l7_7, rating_l7_8,rating_l8_1, rating_l8_2, rating_l8_3, rating_l8_4, rating_l8_5, rating_l8_6, rating_l8_7, rating_l8_8, rating_l9_1,rating_l9_2, rating_l9_3, rating_l9_4, rating_l9_5, rating_l9_6, rating_l9_7, rating_l9_8, rating_l10_1, rating_l10_2, rating_l10_3, rating_l10_4, rating_l10_5, rating_l10_6, rating_l10_7, rating_l10_8, rating_l11_1, rating_l11_2, rating_l11_3, rating_l11_4, rating_l11_5, rating_l11_6, rating_l11_7, rating_l11_8, rating_l12_1, rating_l12_2, rating_l12_3, rating_l12_4, rating_l12_5, rating_l12_6, rating_l12_7,rating_l12_8, rating_l13_1, rating_l13_2, rating_l13_3, rating_l13_4, rating_l13_5, rating_l13_6, rating_l13_7, rating_l13_8, rating_l14_1, rating_l14_2, rating_l14_3, rating_l14_4, rating_l14_5, rating_l14_6, rating_l14_7, rating_l14_8, rating_l15_1, rating_l15_2, rating_l15_3, rating_l15_4, rating_l15_5, rating_l15_6, rating_l15_7, rating_l15_8, rating_l16_1, rating_l16_2, rating_l16_3, rating_l16_4, rating_l16_5, rating_l16_6, rating_l16_7, rating_l16_8, rating_l17_1, rating_l17_2, rating_l17_3, rating_l17_4, rating_l17_5, rating_l17_6, rating_l17_7, rating_l17_8, rating_l18_1, rating_l18_2, rating_l18_3, rating_l18_4, rating_l18_5, rating_l18_6, rating_l18_7, rating_l18_8, rating_l19_1, rating_l19_2, rating_l19_3, rating_l19_4, rating_l19_5, rating_l19_6, rating_l19_7, rating_l19_8, rating_l20_1, rating_l20_2, rating_l20_3, rating_l20_4, rating_l20_5, rating_l20_6, rating_l20_7, rating_l20_8, rating_l21_1, rating_l21_2, rating_l21_3, rating_l21_4, rating_l21_5, rating_l21_6, rating_l21_7, rating_l21_8, rating_l22_1, rating_l22_2, rating_l22_3, rating_l22_4, rating_l22_5, rating_l22_6, rating_l22_7, rating_l22_8, rating_l23_1, rating_l23_2, rating_l23_3, rating_l23_4, rating_l23_5, rating_l23_6, rating_l23_7, rating_l23_8, rating_l24_1, rating_l24_2, rating_l24_3, rating_l24_4, rating_l24_5, rating_l24_6, rating_l24_7, rating_l24_8)
+# Combine all data into a single dataset
+rating_l <- mget(ls(pattern = "^rating_l\\d+_\\d+$")) %>% bind_rows(.id = "file_id")
 ```
 
 Merged data 
@@ -833,5 +838,20 @@ rating <- ggplot(total_rating, aes(x = factor(rating), fill = correct_response))
 ggsave("rating.png")
 ```
 
+```{r}
+difference_st <- merge(st_0, st_180, by = "participant", suffixes = c("_st_0", "_st_180")) %>% mutate(difference = correctpercentage_st_0 - correctpercentage_st_180) %>% select(participant, difference)
+
+difference_st$delay <- "short"
+
+difference_lt <- merge(lt_0, lt_180, by = "participant", suffixes = c("_lt_0", "_lt_180")) %>% mutate(difference = correctpercentage_lt_0 - correctpercentage_lt_180) %>% select(participant, difference)
+
+difference_lt$delay <- "long"
+
+difference <- rbind(difference_st, difference_lt)
+
+difference_sleep <- merge(difference, sleep, by = c("participant", "delay"))
+
+
+```
 
 
