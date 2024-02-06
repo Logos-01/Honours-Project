@@ -207,10 +207,10 @@ TukeyHSD(anova_phase_delay)
 #Section 3.3.1 - Chance level performance control
 ```{r}
 # Set the probability of success for a four-option task
-probability_of_success <- 1/4
+probability_of_success <- 0.25
 
 # Number of trials
-n <- 16
+n <- 32
 
 # Calculate chance level
 chance_level <- n * probability_of_success
@@ -222,10 +222,27 @@ confidence_interval <- binom.test(chance_level, n, conf.level = 0.95)$conf.int
 cat("Chance Level:", chance_level, "\n")
 cat("95% Confidence Interval:", confidence_interval[1], "-", confidence_interval[2], "\n")
 
-#Find participants who performed at chance level or below
-general_filtered <- general %>% filter(correct_responses > 5)
+
+filtered_st <- st %>% group_by(participant, delay) %>%
+  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
+
+filtered_lt <- lt %>% group_by(participant, delay) %>%
+  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
+
+filtered <- rbind(filtered_st, filtered_lt)
 
 #The last object contains data from participants exclusively performing above chance level
+
+filtered %>% filter(correct_responses < 13)
+
+general_filtered <- general[!(general$participant %in% c(2, 13, 19, 24) & general$delay == "long"), ]
+
+
+lt_0_filtered <- lt_0[!(lt_0$participant %in% c(2, 13, 19, 24) & lt_0$delay == "long"), ]
+
+
+lt_180_filtered <- lt_180[!(lt_180$participant %in% c(2, 13, 19, 24) & lt_180$delay == "long"), ]
+
 ```
 
 #Rerun analyses filtered for participant performing at chance level
@@ -233,13 +250,22 @@ general_filtered <- general %>% filter(correct_responses > 5)
 descriptives_filtered <- general_filtered %>% group_by(phase_word, delay) %>% summarise(mean_correct = mean(correctpercentage), sd_correct = sd(correctpercentage), sem = sd_correct/sqrt(48), min = min(correctpercentage), max = max(correctpercentage), ci_lower = t.test(correctpercentage)$conf.int[1],
     ci_upper = t.test(correctpercentage)$conf.int[2])
 
-
 anova_filtered <- aov(correctpercentage ~ delay * phase_word, data = general_filtered)
 summary(anova_filtered)
 
 #TukeyHSD(anova_filtered) #No need as ANOVA is still non-significant
 
 etaSquared(anova_filtered)
+
+
+t_test_lt_filtered <- t.test(lt_0_filtered$correctpercentage, lt_180_filtered$correctpercentage, paired = TRUE)
+
+#Paired because all long-term participants (within-subject)
+
+print(t_test_lt_filtered)
+
+cohensD(lt_0_filtered$correctpercentage, lt_180_filtered$correctpercentage)
+
 ```
 
 #Visualisation - Figure 4 + alternative visualisations
@@ -479,8 +505,7 @@ mean_data_quality <- general_sleep %>%
   group_by(delay, phase, Quality) %>%
   summarise(mean_correctpercentage = mean(correctpercentage))
 
-#quality <- 
-  ggplot(general_sleep, aes(x = as.factor(phase), y = correctpercentage)) +
+quality <- ggplot(general_sleep, aes(x = as.factor(phase), y = correctpercentage)) +
   geom_point(alpha = 0.2) +
   geom_line(alpha = 0.2, aes(group = participant)) +  
   geom_point(data = mean_data_quality, aes(x = factor(phase), y = mean_correctpercentage), color = "red", size = 2) +
@@ -665,7 +690,7 @@ ggsave("sync.png")
 probability_of_success_1 <- 1/2
 
 # Number of trials
-n_1 <- 8
+n_1 <- 16
 
 # Calculate chance level
 chance_level_1 <- n_1 * probability_of_success_1
@@ -678,10 +703,27 @@ cat("Chance Level:", chance_level_1, "\n_1")
 cat("95% Confidence Interval:", confidence_interval_1[1], "-", confidence_interval_1[2], "\n_1")
 
 #Find participants who performed at chance level or below
-sync_filtered <- sync_counts %>% filter(correct_responses > 5)
+sync_nophase <- rbind(sync_s, sync_l) %>% rename(phase_word = `respMat_ 5`, phase = `respMat_ 8`,  correct = respMat_10, participant = `respMat_ 1`, response = respMat_11) %>% mutate(correct_response = (response == correct)) %>% group_by(participant, delay) %>% summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE)) %>% filter(correct_responses < 9)
+
+sync_nophase %>% filter(correct_responses < 9)
+
+# Define the participant numbers to exclude
+participants_to_exclude_long <- c(1, 4, 5, 6, 8, 10, 11, 12, 13, 16, 21, 22, 23, 24)
+
+# Filter out rows with the specified participant numbers and "long" delay
+sync_filtered <- rbind(sync_s, sync_l) %>% rename(phase_word = `respMat_ 5`, phase = `respMat_ 8`,  correct = respMat_10, participant = `respMat_ 1`, response = respMat_11) %>% mutate(correct_response = (response == correct)) %>% group_by(participant, delay, phase) %>% summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
+
+sync_filtered <- sync_filtered[!(sync_filtered$participant %in% participants_to_exclude_long & sync_filtered$delay == "long"), ]
+
+participants_to_exclude_short <- c(2, 3, 5, 7, 9, 10, 12, 13, 14, 15, 16, 18)
+
+# Filter out rows with the specified participant numbers and "short" delay
+sync_filtered <- sync_filtered[!(sync_filtered$participant %in% participants_to_exclude_short & sync_filtered$delay == "short"), ]
+
+sync_filtered <- sync_filtered %>% mutate(correctpercentage = ((correct_responses/8)))
 
 #No participant performed above chance level
-anova_sync_filtered <- aov(correctpercentage ~ delay * phase_word, data = sync_filtered)
+anova_sync_filtered <- aov(correctpercentage ~ delay + as.factor(phase), data = sync_filtered)
 summary(anova_sync_filtered)
 
 etaSquared(anova_sync_filtered)
@@ -850,8 +892,57 @@ difference_lt$delay <- "long"
 difference <- rbind(difference_st, difference_lt)
 
 difference_sleep <- merge(difference, sleep, by = c("participant", "delay"))
+```
 
+#Fatigue effects
 
+```{r}
+st <- st %>% rename(block = `testrespMat_ 2`)
+
+lt <- lt %>% rename(block = `testrespMat_ 2`)
+
+fatigue_st <- st %>% group_by(participant, block, phase_word, phase, delay) %>%
+  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
+
+fatigue_lt <- lt %>% group_by(participant, block, phase_word, phase, delay) %>%
+  summarise(correct_responses = sum(correct_response == TRUE, na.rm = TRUE))
+
+fatigue <- rbind(fatigue_st, fatigue_lt)
+
+descriptives_fatigue <- fatigue %>% group_by(block, phase_word, delay) %>% summarise(mean = mean(correct_responses))
+```
+
+```{r}
+anova_fatigue <- aov(correct_responses ~ delay + phase_word + as.factor(block), data = fatigue)
+
+summary(anova_fatigue)
+
+TukeyHSD(anova_fatigue)
+
+etaSquared(anova_fatigue)
+```
+
+```{r}
+mean_data_fatigue <- fatigue %>%
+  group_by(delay, phase, block) %>%
+  summarise(mean_correctresponses = mean(correct_responses))
+
+fatigue <- ggplot(fatigue, aes(x = as.factor(phase), y = correct_responses)) +
+  geom_point(alpha = 0.2) +
+  geom_line(alpha = 0.2, aes(group = participant)) +  
+  geom_point(data = mean_data_fatigue, aes(x = factor(phase), y = mean_correctresponses), color = "red", size = 2) +
+  geom_line(data = mean_data_fatigue, aes(x = factor(phase), y = mean_correctresponses, group = 1), color = "red", size = 1) +
+  facet_grid(delay ~ block, labeller = labeller(delay = 
+    c("short" = "Short Delay (5min)",
+      "long" = "Long Delay (24h)"))) +  # Facet wrap according to delay
+  xlab("Phase Offset (degree)") +
+  ylab("Accuracy in Recall Task") +
+  theme_minimal() +
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 18, face = "bold"), strip.text = element_text(size = 14)) +
+  scale_x_discrete(expand = c(0.1, 0.1)) 
+
+ggsave("fatigue.png")
 ```
 
 
